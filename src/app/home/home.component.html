@@ -1,0 +1,10 @@
+<div *ngIf="data!==undefined">
+    <div>Total confirmed: {{data.TotalConfirmed }} </div>
+    <div>Total recovered: {{ data.TotalRecovered }} </div>
+    <div>Total deaths: {{ data.TotalDeaths }} </div>
+
+    <div style="display: block;">
+        <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"
+            [colors]="pieChartColors"></canvas>
+    </div>
+</div>
