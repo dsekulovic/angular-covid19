@@ -18,14 +18,7 @@ export class ChartsComponent implements OnInit {
 
   lineChartLabels: Label[] = [];
   lineChartType: ChartType = "line";
-  lineChartData: ChartDataSets[] = [
-    { data: [], label: "" },
-    { data: [], label: "" },
-    {
-      data: [],
-      label: "",
-    },
-  ];
+  lineChartData: ChartDataSets[] = [];
   lineChartColors = [
     {
       backgroundColor: "rgba(240, 52, 52, 0.8)",
@@ -45,20 +38,17 @@ export class ChartsComponent implements OnInit {
   }
 
   onClick(type: string) {
+    this.lineChartLabels = [];
+    this.lineChartData = [];
     this.loadChartData(type);
   }
 
   loadChartData(type: string) {
     this.activeSort = type;
-    this.lineChartData = [
-      { data: [], label: this.labels[0] },
-      { data: [], label: this.labels[1] },
-      {
-        data: [],
-        label: this.labels[2],
-      },
-    ];
-    this.lineChartLabels = [];
+
+    for (const label of this.labels) {
+      this.lineChartData.push({ data: [], label });
+    }
 
     this.chartData
       .sort((a: CountryInfo, b: CountryInfo) => (a[type] < b[type] ? 1 : -1))
