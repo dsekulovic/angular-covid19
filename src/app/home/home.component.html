@@ -1,33 +1,26 @@
-<div class="d-flex justify-content-center mt-5">
-    <div class="spinner-border" role="status" *ngIf="loading">
+<div class="d-flex justify-content-center mt-5" *ngIf="isLoading && !error">
+    <div class="spinner-border" role="status">
         <span class="sr-only">Loading...</span>
     </div>
 </div>
 
-<div class="container" *ngIf="!loading">
+<div class="alert alert-danger mt-3" *ngIf="error">
+    <h1>An error occurred!</h1>
+    <p>{{ error }}</p>
+</div>
+
+<div class="container" *ngIf="!isLoading && !error">
 
     <app-info-card class="row text-center mt-4" [data]="data"></app-info-card>
 
-    <div class="row mt-5 text-center">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-danger active">
-                <input type="radio" name="options" id="option1" checked (click)="changeData('TotalConfirmed')">
-                TotalConfirmed
-            </label>
-            <label class="btn btn-success">
-                <input type="radio" name="options" id="option2" (click)="changeData('TotalRecovered')"> TotalRecovered
-            </label>
-            <label class="btn btn-dark">
-                <input type="radio" name="options" id="option3" (click)="changeData('TotalDeaths')"> TotalDeaths
-            </label>
-        </div>
+    <div class="row">
+        <app-charts class="col-lg-6" [chartData]="chartData"
+            [labels]="['TotalConfirmed','TotalRecovered','TotalDeaths']" [numberOfData]="20">
+        </app-charts>
 
-        <div class="d-flex justify-content-center">
-            <canvas height="100" baseChart [datasets]="barChartData" [labels]="barChartLabels"
-                [chartType]="lineChartType" [colors]="barChartColors">
-            </canvas>
-            <h4 class="mt-3">Top 10 countries total confirmed</h4>
-        </div>
+        <app-charts class="col-lg-6" [chartData]="chartData" [labels]="['NewConfirmed','NewRecovered','NewDeaths']"
+            [numberOfData]="20">
+        </app-charts>
     </div>
 
 </div>

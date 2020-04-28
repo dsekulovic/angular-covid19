@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { CovidInfo } from "../home/home.model";
+import { CovidInfo } from "../interface/interface";
 
 @Component({
   selector: "app-info-card",

@@ -1,9 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClass } from "../http.service";
 
-import { ChartType, ChartDataSets } from "chart.js";
-import { Label } from "ng2-charts";
-import { CovidInfo, CountryInfo } from "./home.model";
+import { CovidInfo, CountryInfo } from "../interface/interface";
 
 @Component({
   selector: "app-home",
@@ -11,69 +9,29 @@ import { CovidInfo, CountryInfo } from "./home.model";
   styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent implements OnInit {
-  loading: boolean = false;
+  isLoading: boolean = false;
   data: CovidInfo;
-
-  // barChart data
-  public barChartLabels: Label[] = [];
-  public barChartType: ChartType = "bar";
-  public lineChartType = "line";
-
-  public barChartData: ChartDataSets[] = [
-    { data: [], label: "TotalDeaths" },
-    { data: [], label: "TotalRecovered" },
-    {
-      data: [],
-      label: "TotalConfirmed",
-    },
-  ];
-  public barChartColors = [
-    {
-      backgroundColor: "rgba(0,0,0,0.8)",
-    },
-    {
-      backgroundColor: "rgba(0,255,0,0.8)",
-    },
-    {
-      backgroundColor: "rgba(240, 52, 52, 0.8)",
-    },
-  ];
+  chartData: CountryInfo[];
+  error = null;
 
   constructor(private http: HttpClass) {}
 
   ngOnInit(): void {
-    this.loading = true;
-    this.fetchingData("TotalConfirmed");
+    this.isLoading = true;
+    this.fetchingData();
   }
 
-  changeData(text: string) {
-    this.barChartData = [
-      { data: [], label: "TotalDeaths" },
-      { data: [], label: "TotalRecovered" },
-      {
-        data: [],
-        label: "TotalConfirmed",
+  fetchingData() {
+    this.http.getTotalData().subscribe(
+      (data) => {
+        this.isLoading = false;
+        this.chartData = data.countries;
+        this.data = data.global;
       },
-    ];
-    this.barChartLabels = [];
-
-    this.fetchingData(text);
-  }
-
-  fetchingData(text: string) {
-    this.http.getTotalData(text).subscribe((data) => {
-      console.log(data);
-
-      data.countries.forEach((element: CountryInfo) => {
-        for (const bar of this.barChartData) {
-          bar.data.push(element[bar.label]);
-        }
-
-        this.barChartLabels.push(element.Country);
-      });
-
-      this.data = data.global;
-      this.loading = false;
-    });
+      (error) => {
+        this.error = error.message;
+        this.isLoading = false;
+      }
+    );
   }
 }

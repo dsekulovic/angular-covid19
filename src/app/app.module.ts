@@ -12,6 +12,7 @@ import { HomeComponent } from "./home/home.component";
 import { AboutComponent } from "./about/about.component";
 import { LocationComponent } from "./location/location.component";
 import { InfoCardComponent } from "./info-card/info-card.component";
+import { ChartsComponent } from './charts/charts.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { InfoCardComponent } from "./info-card/info-card.component";
     AboutComponent,
     LocationComponent,
     InfoCardComponent,
+    ChartsComponent,
   ],
   imports: [
     BrowserModule,
