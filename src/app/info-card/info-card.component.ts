@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { CovidInfo } from "../interface/interface";
 
 @Component({
@@ -6,10 +6,8 @@ import { CovidInfo } from "../interface/interface";
   templateUrl: "./info-card.component.html",
   styleUrls: ["./info-card.component.scss"],
 })
-export class InfoCardComponent implements OnInit {
+export class InfoCardComponent {
   @Input() data: CovidInfo;
 
   constructor() {}
-
-  ngOnInit(): void {}
 }

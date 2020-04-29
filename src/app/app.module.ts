@@ -3,16 +3,14 @@ import { NgModule } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
 import { ChartsModule } from "ng2-charts";
 import { AgmCoreModule } from "@agm/core";
-
 import { AppRoutingModule } from "./app-routing.module";
 import { GOOGLE_API_KEY } from "./utility/constants";
-
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
 import { AboutComponent } from "./about/about.component";
 import { LocationComponent } from "./location/location.component";
 import { InfoCardComponent } from "./info-card/info-card.component";
-import { ChartsComponent } from './charts/charts.component';
+import { ChartsComponent } from "./charts/charts.component";
 
 @NgModule({
   declarations: [

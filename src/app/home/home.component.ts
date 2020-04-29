@@ -13,20 +13,22 @@ export class HomeComponent implements OnInit {
   data: CovidInfo;
   chartData: CountryInfo[];
   error = null;
+  totalLabels: string[] = ["TotalConfirmed", "TotalRecovered", "TotalDeaths"];
+  newLabels: string[] = ["NewConfirmed", "NewRecovered", "NewDeaths"];
 
   constructor(private http: HttpClass) {}
 
   ngOnInit(): void {
-    this.isLoading = true;
     this.fetchingData();
   }
 
   fetchingData() {
+    this.isLoading = true;
     this.http.getTotalData().subscribe(
-      (data) => {
+      ({ countries, global }) => {
         this.isLoading = false;
-        this.chartData = data.countries;
-        this.data = data.global;
+        this.chartData = countries;
+        this.data = global;
       },
       (error) => {
         this.error = error.message;

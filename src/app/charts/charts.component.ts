@@ -34,31 +34,35 @@ export class ChartsComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    this.lineChartData = this.labels.reduce(
+      (acc, el) => [...acc, { data: [], label: el }],
+      []
+    );
     this.loadChartData(this.labels[0]);
   }
 
   onClick(type: string) {
-    this.lineChartLabels = [];
-    this.lineChartData = [];
     this.loadChartData(type);
   }
 
   loadChartData(type: string) {
     this.activeSort = type;
 
-    for (const label of this.labels) {
-      this.lineChartData.push({ data: [], label });
-    }
-
-    this.chartData
+    const fiteredData = this.chartData
       .sort((a: CountryInfo, b: CountryInfo) => (a[type] < b[type] ? 1 : -1))
-      .slice(0, this.numberOfData)
-      .forEach((element: CountryInfo) => {
-        for (const bar of this.lineChartData) {
-          bar.data.push(element[bar.label]);
-        }
+      .slice(0, this.numberOfData);
 
-        this.lineChartLabels.push(element.Country);
-      });
+    this.lineChartData = this.lineChartData.reduce(
+      (acc, el) => [
+        ...acc,
+        {
+          data: [...fiteredData.map((item) => item[el.label])],
+          label: el.label,
+        },
+      ],
+      []
+    );
+
+    this.lineChartLabels = fiteredData.map((el) => el.Country);
   }
 }

@@ -3,7 +3,7 @@
         <div class="card-body">
             <h5 class="card-title">Total confirmed:</h5>
             <h3 class="card-text">{{data.TotalConfirmed }}</h3>
-            <p class="card-text text-danger" *ngIf="data.NewConfirmed">+{{data.NewConfirmed }}</p>
+            <h6 class="card-text text-danger" *ngIf="data.NewConfirmed">+{{data.NewConfirmed }}</h6>
         </div>
     </div>
 </div>
@@ -12,7 +12,7 @@
         <div class="card-body">
             <h5 class="card-title">Total recovered:</h5>
             <h3 class="card-text">{{ data.TotalRecovered }}</h3>
-            <p class="card-text text-danger" *ngIf="data.NewRecovered">+{{ data.NewRecovered }}</p>
+            <h6 class="card-text text-danger" *ngIf="data.NewRecovered">+{{ data.NewRecovered }}</h6>
         </div>
     </div>
 </div>
@@ -21,7 +21,7 @@
         <div class="card-body">
             <h5 class="card-title">Total deaths:</h5>
             <h3 class="card-text">{{ data.TotalDeaths }}</h3>
-            <p class="card-text text-danger" *ngIf="data.NewDeaths">+{{ data.NewDeaths }}</p>
+            <h6 class="card-text text-danger" *ngIf="data.NewDeaths">+{{ data.NewDeaths }}</h6>
         </div>
     </div>
 </div>
