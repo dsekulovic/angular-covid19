@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { HttpClass } from "../http.service";
 
 import { ICovidInfo, ICountryInfo } from "../interface/interface";
+import { Observable, Subscription } from "rxjs";
 
 @Component({
   selector: "app-home",
@@ -15,17 +16,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   error = null;
   totalLabels: string[] = ["TotalConfirmed", "TotalRecovered", "TotalDeaths"];
   newLabels: string[] = ["NewConfirmed", "NewRecovered", "NewDeaths"];
-  dataSubscription;
+  dataSubscription$: Subscription;
 
   constructor(private http: HttpClass) {}
 
   ngOnInit(): void {
-    this.dataSubscription = this.fetchingData();
+    this.fetchingData();
   }
 
   fetchingData() {
     this.isLoading = true;
-    this.http.getTotalData().subscribe(
+    this.dataSubscription$ = this.http.getTotalData().subscribe(
       ({ countries, global }) => {
         this.isLoading = false;
         this.chartData = countries;
@@ -39,6 +40,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.dataSubscription.unsubscribe();
+    this.dataSubscription$.unsubscribe();
   }
 }
