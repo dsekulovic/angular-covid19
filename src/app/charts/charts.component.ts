@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { ChartType, ChartDataSets } from "chart.js";
 import { Label } from "ng2-charts";
-import { CountryInfo } from "../interface/interface";
+import { ICountryInfo } from "../interface/interface";
 
 @Component({
   selector: "app-charts",
@@ -9,7 +9,7 @@ import { CountryInfo } from "../interface/interface";
   styleUrls: ["./charts.component.scss"],
 })
 export class ChartsComponent implements OnInit {
-  @Input() chartData: CountryInfo[];
+  @Input() chartData: ICountryInfo[];
   @Input() type: string;
   @Input() labels: string[];
   @Input() numberOfData: number;
@@ -49,7 +49,7 @@ export class ChartsComponent implements OnInit {
     this.activeSort = type;
 
     const fiteredData = this.chartData
-      .sort((a: CountryInfo, b: CountryInfo) => (a[type] < b[type] ? 1 : -1))
+      .sort((a: ICountryInfo, b: ICountryInfo) => (a[type] < b[type] ? 1 : -1))
       .slice(0, this.numberOfData);
 
     this.lineChartData = this.lineChartData.reduce(

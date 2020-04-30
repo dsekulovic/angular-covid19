@@ -1,4 +1,4 @@
-export interface CovidInfo {
+export interface ICovidInfo {
   TotalDeaths: number;
   TotalRecovered: number;
   TotalConfirmed: number;
@@ -7,7 +7,7 @@ export interface CovidInfo {
   NewConfirmed?: number;
 }
 
-export interface CountryInfo {
+export interface ICountryInfo {
   Country: string;
   Date: Date;
   TotalDeaths?: number;

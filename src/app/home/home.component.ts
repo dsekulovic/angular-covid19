@@ -1,25 +1,26 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { HttpClass } from "../http.service";
 
-import { CovidInfo, CountryInfo } from "../interface/interface";
+import { ICovidInfo, ICountryInfo } from "../interface/interface";
 
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
-  data: CovidInfo;
-  chartData: CountryInfo[];
+  data: ICovidInfo;
+  chartData: ICountryInfo[];
   error = null;
   totalLabels: string[] = ["TotalConfirmed", "TotalRecovered", "TotalDeaths"];
   newLabels: string[] = ["NewConfirmed", "NewRecovered", "NewDeaths"];
+  dataSubscription;
 
   constructor(private http: HttpClass) {}
 
   ngOnInit(): void {
-    this.fetchingData();
+    this.dataSubscription = this.fetchingData();
   }
 
   fetchingData() {
@@ -35,5 +36,9 @@ export class HomeComponent implements OnInit {
         this.isLoading = false;
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.dataSubscription.unsubscribe();
   }
 }

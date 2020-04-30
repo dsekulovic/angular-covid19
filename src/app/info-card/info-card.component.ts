@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { CovidInfo } from "../interface/interface";
+import { ICovidInfo } from "../interface/interface";
 
 @Component({
   selector: "app-info-card",
@@ -7,7 +7,7 @@ import { CovidInfo } from "../interface/interface";
   styleUrls: ["./info-card.component.scss"],
 })
 export class InfoCardComponent {
-  @Input() data: CovidInfo;
+  @Input() data: ICovidInfo;
 
   constructor() {}
 }
