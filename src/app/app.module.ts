@@ -11,6 +11,8 @@ import { AboutComponent } from "./about/about.component";
 import { LocationComponent } from "./location/location.component";
 import { InfoCardComponent } from "./info-card/info-card.component";
 import { ChartsComponent } from "./charts/charts.component";
+import { FormsModule } from "@angular/forms";
+import { FilterPipe } from "./location/filter.pipe";
 
 @NgModule({
   declarations: [
@@ -20,6 +22,7 @@ import { ChartsComponent } from "./charts/charts.component";
     LocationComponent,
     InfoCardComponent,
     ChartsComponent,
+    FilterPipe,
   ],
   imports: [
     BrowserModule,
@@ -29,6 +32,7 @@ import { ChartsComponent } from "./charts/charts.component";
     AgmCoreModule.forRoot({
       apiKey: GOOGLE_API_KEY,
     }),
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
