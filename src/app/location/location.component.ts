@@ -18,6 +18,7 @@ export class LocationComponent implements OnInit, OnDestroy {
   error = null;
   labels = ["Confirmed", "Recovered", "Deaths"];
   period = [0, 7, 15, 30];
+  weather = { temp: null, name: "" };
   name: string;
   temp: number;
   searchText: string;
@@ -34,12 +35,14 @@ export class LocationComponent implements OnInit, OnDestroy {
       })
     );
 
-    let id = "sebia";
-    this.route.params.subscribe((params) => (id = params["id"]));
-    this.dataForCountry(id);
+    this.route.params.subscribe((params) => this.dataForCountry(params["id"]));
   }
 
-  onClick(data: string) {
+  ngOnDestroy() {
+    this.subs.forEach((sub) => sub.unsubscribe());
+  }
+
+  onSelectCountry(data: string) {
     this.searchText = "";
     this.dataForCountry(data);
   }
@@ -54,15 +57,16 @@ export class LocationComponent implements OnInit, OnDestroy {
           this.longitude = +data[0].Lon;
 
           this.subs.push(
-            this.http
-              .getWeather(this.latitude, this.longitude)
-              .subscribe(
-                (data) => (
-                  (this.temp = Math.round(data.temp)),
-                  (this.name = data.name),
-                  (this.isLoading = false)
-                )
+            this.http.getWeather(this.latitude, this.longitude).subscribe(
+              (data) => (
+                (this.weather = {
+                  ...this.weather,
+                  temp: Math.round(data.temp),
+                  name: data.name,
+                }),
+                (this.isLoading = false)
               )
+            )
           );
           this.error = null;
         } else {
@@ -71,9 +75,5 @@ export class LocationComponent implements OnInit, OnDestroy {
         }
       })
     );
-  }
-
-  ngOnDestroy() {
-    this.subs.forEach((sub) => sub.unsubscribe());
   }
 }

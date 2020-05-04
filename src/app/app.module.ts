@@ -13,6 +13,7 @@ import { InfoCardComponent } from "./info-card/info-card.component";
 import { ChartsComponent } from "./charts/charts.component";
 import { FormsModule } from "@angular/forms";
 import { FilterPipe } from "./location/filter.pipe";
+import { TextTransformPipe } from "./charts/text-transform.pipe";
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { FilterPipe } from "./location/filter.pipe";
     InfoCardComponent,
     ChartsComponent,
     FilterPipe,
+    TextTransformPipe,
   ],
   imports: [
     BrowserModule,

@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  SimpleChanges,
-  OnChanges,
-} from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { ChartType, ChartDataSets } from "chart.js";
 import { Label } from "ng2-charts";
 import { ICountryInfo } from "../interface/interface";
@@ -15,7 +9,7 @@ import { ActivatedRoute } from "@angular/router";
   templateUrl: "./charts.component.html",
   styleUrls: ["./charts.component.scss"],
 })
-export class ChartsComponent implements OnInit, OnChanges {
+export class ChartsComponent implements OnInit {
   @Input() chartData: ICountryInfo[];
   @Input() type: string;
   @Input() labels: string[];
@@ -23,7 +17,7 @@ export class ChartsComponent implements OnInit, OnChanges {
   @Input() period: number[];
 
   text: string;
-  activeSort: string = "";
+  activeSort: any;
 
   lineChartLabels: Label[] = [];
   lineChartType: ChartType = "line";
@@ -48,13 +42,9 @@ export class ChartsComponent implements OnInit, OnChanges {
       []
     );
 
-    this.loadChartData(this.labels[0]);
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    let id = "";
-    this.route.params.subscribe((params) => (id = params["id"]));
-    this.loadChartData(id);
+    this.route.params.subscribe((params) =>
+      this.loadChartData(params["id"] || this.labels[0])
+    );
   }
 
   onClick(type: any) {
@@ -68,13 +58,16 @@ export class ChartsComponent implements OnInit, OnChanges {
     if (this.period) {
       filteredData = this.chartData.slice(0 - type);
       this.text = `Covid-19 in ${this.chartData[0].Country}`;
+      if (typeof type === "string") {
+        this.activeSort = 0;
+      }
     } else {
       filteredData = this.chartData
         .sort((a: ICountryInfo, b: ICountryInfo) =>
           a[type] < b[type] ? 1 : -1
         )
         .slice(0, this.numberOfData);
-      this.text = `20 countries witn most ${this.activeSort}`;
+      this.text = `20 countries with most ${this.activeSort}`;
     }
 
     this.lineChartData = this.lineChartData.reduce(
@@ -91,5 +84,9 @@ export class ChartsComponent implements OnInit, OnChanges {
     this.lineChartLabels = filteredData.map((el) =>
       this.period ? el.Date : el.Country
     );
+  }
+
+  isClassActive(data) {
+    return this.activeSort === data;
   }
 }

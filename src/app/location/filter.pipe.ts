@@ -7,9 +7,11 @@ import { ICountryInfo } from "../interface/interface";
 export class FilterPipe implements PipeTransform {
   transform(items: ICountryInfo[], searchText: string): any[] {
     if (!items) return [];
+
     if (!searchText) return items;
-    return items.filter((it) =>
-      it.Country.toLowerCase().includes(searchText.toLowerCase())
+
+    return items.filter((item) =>
+      item.Country.toLowerCase().includes(searchText.toLowerCase())
     );
   }
 }

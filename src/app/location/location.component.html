@@ -9,11 +9,11 @@
             <input type="text" class="form-control" placeholder="Find country" autocomplete="off"
                 [(ngModel)]="searchText">
         </div>
-        <div class="countries-list">
+        <div class="countries-list border border-secondary mb-3">
             <div *ngFor="let country of countries | filter : searchText" style="overflow: hidden;">
                 <button [routerLink]="['/location', country.Slug]"
                     class="btn btn-block btn-outline-secondary mt-1 text-truncate text-left"
-                    (click)=" onClick(country.Slug)">{{ country.Country }}</button>
+                    (click)=" onSelectCountry(country.Slug)">{{ country.Country }}</button>
             </div>
         </div>
     </div>
@@ -23,15 +23,15 @@
             <p>{{ error }}</p>
         </div>
         <div class="map d-flex" *ngIf="!error">
-            <agm-map [latitude]="latitude" [longitude]="longitude">
+            <agm-map class="w-100 h-100" [latitude]="latitude" [longitude]="longitude">
                 <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
             </agm-map>
         </div>
         <div class="d-xl-flex flex-xl-row-reverse p-3" *ngIf="!error">
             <div class="col-xl-5 bg-light text-center pt-5 font-weight-bold align-self-center" style="height: 300px">
-                <h1>{{ name }}</h1>
-                <h3>{{ temp }}<sup>&#x2103;</sup></h3>
-                <h4 class="mt-5">{{temp>25 ? 'We are safe!': 'Corona will kill us!'}}</h4>
+                <h1>{{ weather.name }}</h1>
+                <h3>{{ weather.temp }}<sup>&#x2103;</sup></h3>
+                <h4 class="mt-5">{{weather.temp>25 ? 'We are safe!': 'Corona will kill us!'}}</h4>
             </div>
             <app-charts class="col-xl-7 mt-3" [chartData]="mainData" [labels]="labels" [period]="period">
             </app-charts>

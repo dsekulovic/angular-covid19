@@ -27,21 +27,15 @@ export class HttpClass {
     return this.http
       .get<any>(`https://api.covid19api.com/dayone/country/${slug}`)
       .pipe(
-        map((data) => {
-          const newData = [];
-          for (const el of data) {
-            newData.push({
-              ...el,
-              Date: new Date(el.Date)
-                .toDateString()
-                .split(" ")
-                .slice(1)
-                .join(" "),
-              // .toLocaleDateString(),
-            });
-          }
-          return newData;
-        })
+        map((data) =>
+          data.reduce(
+            (acc, el) => [
+              ...acc,
+              { ...el, Date: new Date(el.Date).toLocaleDateString() },
+            ],
+            []
+          )
+        )
       );
   }
 
