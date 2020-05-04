@@ -49,31 +49,37 @@ export class LocationComponent implements OnInit, OnDestroy {
 
   dataForCountry(data: string) {
     this.subs.push(
-      this.http.getDataForCountry(data).subscribe((data) => {
-        this.mainData = data;
+      this.http.getDataForCountry(data).subscribe(
+        (data) => {
+          this.mainData = data;
 
-        if (data.length) {
-          this.latitude = +data[0].Lat;
-          this.longitude = +data[0].Lon;
+          if (data.length) {
+            this.latitude = +data[0].Lat;
+            this.longitude = +data[0].Lon;
 
-          this.subs.push(
-            this.http.getWeather(this.latitude, this.longitude).subscribe(
-              (data) => (
-                (this.weather = {
-                  ...this.weather,
-                  temp: Math.round(data.temp),
-                  name: data.name,
-                }),
-                (this.isLoading = false)
+            this.subs.push(
+              this.http.getWeather(this.latitude, this.longitude).subscribe(
+                (data) => (
+                  (this.weather = {
+                    ...this.weather,
+                    temp: Math.round(data.temp),
+                    name: data.name,
+                  }),
+                  (this.isLoading = false)
+                )
               )
-            )
-          );
-          this.error = null;
-        } else {
-          this.error = "No data!";
+            );
+            this.error = null;
+          } else {
+            this.error = "No data!";
+            this.isLoading = false;
+          }
+        },
+        (error) => {
+          this.error = error.message;
           this.isLoading = false;
         }
-      })
+      )
     );
   }
 }
