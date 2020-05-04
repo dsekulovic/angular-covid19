@@ -3,15 +3,17 @@
         <span class="sr-only">Loading...</span>
     </div>
 </div>
-<div class="d-flex" *ngIf="!isLoading">
-    <div class="d-flex flex-column">
-        <div class="form-group">
-            <input type="text" class="form-control" id="usr" placeholder="Find country" [(ngModel)]="searchText">
+<div class="d-md-flex" *ngIf="!isLoading">
+    <div class="buttons-input d-flex flex-column">
+        <div class="form-group mt-1">
+            <input type="text" class="form-control" placeholder="Find country" autocomplete="off"
+                [(ngModel)]="searchText">
         </div>
         <div class="countries-list">
             <div *ngFor="let country of countries | filter : searchText" style="overflow: hidden;">
-                <button [routerLink]="['/location', country.Slug]" class="d-inline-block text-truncate text-left"
-                    style="max-width: 300px;" (click)=" onClick(country.Slug)">{{ country.Country }}</button>
+                <button [routerLink]="['/location', country.Slug]"
+                    class="btn btn-block btn-outline-secondary mt-1 text-truncate text-left"
+                    (click)=" onClick(country.Slug)">{{ country.Country }}</button>
             </div>
         </div>
     </div>
@@ -25,13 +27,13 @@
                 <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
             </agm-map>
         </div>
-        <div class="d-lg-flex flex-row-reverse p-3" *ngIf="!error">
-            <div class="col-lg-5 bg-light text-center pt-5 font-weight-bold align-self-center" style="height: 300px">
+        <div class="d-xl-flex flex-xl-row-reverse p-3" *ngIf="!error">
+            <div class="col-xl-5 bg-light text-center pt-5 font-weight-bold align-self-center" style="height: 300px">
                 <h1>{{ name }}</h1>
                 <h3>{{ temp }}<sup>&#x2103;</sup></h3>
                 <h4 class="mt-5">{{temp>25 ? 'We are safe!': 'Corona will kill us!'}}</h4>
             </div>
-            <app-charts class="col-lg-7 mt-3" [chartData]="mainData" [labels]="labels" [period]="period">
+            <app-charts class="col-xl-7 mt-3" [chartData]="mainData" [labels]="labels" [period]="period">
             </app-charts>
         </div>
     </div>

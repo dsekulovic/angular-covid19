@@ -22,6 +22,7 @@ export class ChartsComponent implements OnInit, OnChanges {
   @Input() numberOfData: number;
   @Input() period: number[];
 
+  text: string;
   activeSort: string = "";
 
   lineChartLabels: Label[] = [];
@@ -46,7 +47,6 @@ export class ChartsComponent implements OnInit, OnChanges {
       (acc, el) => [...acc, { data: [], label: el }],
       []
     );
-    // this.location = this.route.url.value[0].path;
 
     this.loadChartData(this.labels[0]);
   }
@@ -54,7 +54,6 @@ export class ChartsComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     let id = "";
     this.route.params.subscribe((params) => (id = params["id"]));
-
     this.loadChartData(id);
   }
 
@@ -65,14 +64,17 @@ export class ChartsComponent implements OnInit, OnChanges {
   loadChartData(type: any) {
     this.activeSort = type;
     let filteredData = [];
+
     if (this.period) {
       filteredData = this.chartData.slice(0 - type);
+      this.text = `Covid-19 in ${this.chartData[0].Country}`;
     } else {
       filteredData = this.chartData
         .sort((a: ICountryInfo, b: ICountryInfo) =>
           a[type] < b[type] ? 1 : -1
         )
         .slice(0, this.numberOfData);
+      this.text = `20 countries witn most ${this.activeSort}`;
     }
 
     this.lineChartData = this.lineChartData.reduce(
@@ -85,10 +87,9 @@ export class ChartsComponent implements OnInit, OnChanges {
       ],
       []
     );
-    if (this.period) {
-      this.lineChartLabels = filteredData.map((el) => el.Date);
-    } else {
-      this.lineChartLabels = filteredData.map((el) => el.Country);
-    }
+
+    this.lineChartLabels = filteredData.map((el) =>
+      this.period ? el.Date : el.Country
+    );
   }
 }

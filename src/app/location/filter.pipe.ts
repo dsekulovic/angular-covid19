@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { ICountryInfo } from "../interface/interface";
+
 @Pipe({
   name: "filter",
 })
