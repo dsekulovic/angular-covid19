@@ -1,15 +1,16 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, OnDestroy } from "@angular/core";
 import { ChartType, ChartDataSets } from "chart.js";
 import { Label } from "ng2-charts";
 import { ICountryInfo } from "../interface/interface";
 import { ActivatedRoute } from "@angular/router";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-charts",
   templateUrl: "./charts.component.html",
   styleUrls: ["./charts.component.scss"],
 })
-export class ChartsComponent implements OnInit {
+export class ChartsComponent implements OnInit, OnDestroy {
   @Input() chartData: ICountryInfo[];
   @Input() type: string;
   @Input() labels: string[];
@@ -18,6 +19,7 @@ export class ChartsComponent implements OnInit {
 
   text: string;
   activeSort: any;
+  routeSubscription$: Subscription;
 
   lineChartLabels: Label[] = [];
   lineChartType: ChartType = "line";
@@ -42,12 +44,16 @@ export class ChartsComponent implements OnInit {
       []
     );
 
-    this.route.params.subscribe((params) =>
+    this.routeSubscription$ = this.route.params.subscribe((params) =>
       this.loadChartData(params["id"] || this.labels[0])
     );
   }
 
-  onClick(type: any) {
+  ngOnDestroy() {
+    this.routeSubscription$.unsubscribe();
+  }
+
+  onLoadChartData(type: any) {
     this.loadChartData(type);
   }
 
@@ -58,6 +64,7 @@ export class ChartsComponent implements OnInit {
     if (this.period) {
       filteredData = this.chartData.slice(0 - type);
       this.text = `Covid-19 in ${this.chartData[0].Country}`;
+
       if (typeof type === "string") {
         this.activeSort = 0;
       }
@@ -84,9 +91,5 @@ export class ChartsComponent implements OnInit {
     this.lineChartLabels = filteredData.map((el) =>
       this.period ? el.Date : el.Country
     );
-  }
-
-  isClassActive(data) {
-    return this.activeSort === data;
   }
 }

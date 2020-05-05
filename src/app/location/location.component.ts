@@ -35,7 +35,9 @@ export class LocationComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.route.params.subscribe((params) => this.dataForCountry(params["id"]));
+    this.subs.push(
+      this.route.params.subscribe((params) => this.dataForCountry(params["id"]))
+    );
   }
 
   ngOnDestroy() {

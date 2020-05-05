@@ -10,7 +10,7 @@
                 [(ngModel)]="searchText">
         </div>
         <div class="countries-list border border-secondary mb-3">
-            <div *ngFor="let country of countries | filter : searchText" style="overflow: hidden;">
+            <div *ngFor="let country of countries | filter : searchText">
                 <button [routerLink]="['/location', country.Slug]"
                     class="btn btn-block btn-outline-secondary mt-1 text-truncate text-left"
                     (click)=" onSelectCountry(country.Slug)">{{ country.Country }}</button>
