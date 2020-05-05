@@ -3,13 +3,13 @@
         <span class="sr-only">Loading...</span>
     </div>
 </div>
-<div class="d-md-flex" *ngIf="!isLoading">
-    <div class="buttons-input d-flex flex-column">
+<div class="d-md-flex vh-100" *ngIf="!isLoading">
+    <div class="buttons-input d-flex flex-column mb-md-5">
         <div class="form-group mt-1">
             <input type="text" class="form-control" placeholder="Find country" autocomplete="off"
                 [(ngModel)]="searchText">
         </div>
-        <div class="countries-list border border-secondary mb-3">
+        <div class="countries-list border border-secondary mb-2">
             <div *ngFor="let country of countries | filter : searchText">
                 <button [routerLink]="['/location', country.Slug]"
                     class="btn btn-block btn-outline-secondary mt-1 text-truncate text-left"

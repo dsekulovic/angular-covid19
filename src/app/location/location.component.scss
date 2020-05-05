@@ -1,5 +1,5 @@
 .countries-list {
-  max-height: 200px;
+  height: 200px;
   overflow-y: auto;
 }
 
@@ -11,15 +11,14 @@
 @media (min-width: 768px) {
   .buttons-input {
     width: 200px;
-  }
 
-  .countries-list {
-    max-height: calc(100vh - 130px);
-    overflow-y: auto;
+    .countries-list {
+      height: 100%;
+      overflow-y: auto;
+    }
   }
 
   .side-data {
-    height: calc(100vh - 60px);
     overflow-y: auto;
   }
 }
