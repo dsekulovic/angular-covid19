@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { HttpClass } from "../http.service";
-
 import { ICovidInfo, ICountryInfo } from "../interface/interface";
-import { Observable, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-home",
