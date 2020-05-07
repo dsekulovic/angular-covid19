@@ -26,6 +26,7 @@ export class LocationComponent implements OnInit, OnDestroy {
   temp: number;
   searchText: string;
   subs: Subscription[] = [];
+  activeCountry: string;
 
   text: string;
   activeSort: number;
@@ -74,6 +75,7 @@ export class LocationComponent implements OnInit, OnDestroy {
   }
 
   dataForCountry(data: string) {
+    this.activeCountry = data;
     this.subs.push(
       this.http.getDataForCountry(data).subscribe(
         (data) => {

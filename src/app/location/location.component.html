@@ -13,8 +13,8 @@
             <div *ngFor="let country of countries | filter : searchText">
                 <button [routerLink]="['/location', country.Slug]"
                     class="btn btn-block btn-outline-secondary mt-1 text-truncate text-left"
-                    [class.active]="mainData[0].Country === country.Country"
-                    (click)=" onSelectCountry(country.Slug)">{{ country.Country }}</button>
+                    [class.active]="activeCountry === country.Slug"
+                    (click)="onSelectCountry(country.Slug)">{{ country.Country }}</button>
             </div>
         </div>
     </div>
