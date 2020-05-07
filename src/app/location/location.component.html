@@ -13,14 +13,15 @@
             <div *ngFor="let country of countries | filter : searchText">
                 <button [routerLink]="['/location', country.Slug]"
                     class="btn btn-block btn-outline-secondary mt-1 text-truncate text-left"
+                    [class.active]="mainData[0].Country === country.Country"
                     (click)=" onSelectCountry(country.Slug)">{{ country.Country }}</button>
             </div>
         </div>
     </div>
-    <div class="side-data col p-0">
-        <div class="alert alert-danger mt-3" *ngIf="error">
-            <h1>An error occurred!</h1>
-            <p>{{ error }}</p>
+    <div class="side-data col p-0" [ngClass]="{'d-flex justify-content-center align-items-center min-vh-100': error}">
+        <div class="alert alert-secondary text-center" *ngIf="error">
+            <h1 style="font-size: 100px;"><b>404</b></h1>
+            <h3>{{ error }}</h3>
         </div>
         <div class="map d-flex" *ngIf="!error">
             <agm-map class="w-100 h-100" [latitude]="latitude" [longitude]="longitude">
@@ -31,10 +32,25 @@
             <div class="col-xl-5 bg-light text-center pt-5 font-weight-bold align-self-center" style="height: 300px">
                 <h1>{{ weather.name }}</h1>
                 <h3>{{ weather.temp }}<sup>&#x2103;</sup></h3>
-                <h4 class="mt-5">{{weather.temp>25 ? 'We are safe!': 'Corona will kill us!'}}</h4>
+                <h4 class="mt-5">
+                    {{weather.temp>25 ? 'At this temperature, Covid-19 should be less active!': 'Weather conditions are suitable for spreading Covid-19!'}}
+                </h4>
             </div>
-            <app-charts class="col-xl-7 mt-3" [chartData]="mainData" [labels]="labels" [period]="period">
-            </app-charts>
+            <div class="col-xl-7 mt-3 justify-content-center">
+                <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-outline-secondary" [class.active]="activeSort === info"
+                        *ngFor="let info of period">
+                        <input type="radio" name="options" (click)="onLoadChartData(info)">
+                        {{ info | textTransform }}
+                    </label>
+                </div>
+                <div class="mt-4">
+                    <canvas height="100" baseChart [datasets]="lineChartData" [labels]="lineChartLabels"
+                        [chartType]="lineChartType" [colors]="lineChartColors">
+                    </canvas>
+                    <h5 class="text-center py-2">{{ text }}</h5>
+                </div>
+            </div>
         </div>
     </div>
 </div>

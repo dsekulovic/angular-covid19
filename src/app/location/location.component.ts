@@ -3,6 +3,9 @@ import { HttpClass } from "../http.service";
 import { ICountryInfo } from "../interface/interface";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs";
+import { Label } from "ng2-charts";
+import { ChartType, ChartDataSets } from "chart.js";
+import { chartDataLoader, initializeLabels } from "../utility/helper";
 
 @Component({
   selector: "app-location",
@@ -24,9 +27,30 @@ export class LocationComponent implements OnInit, OnDestroy {
   searchText: string;
   subs: Subscription[] = [];
 
+  text: string;
+  activeSort: number;
+  routeSubscription$: Subscription;
+
+  lineChartLabels: Label[] = [];
+  lineChartType: ChartType = "line";
+  lineChartData: ChartDataSets[] = [];
+  lineChartColors = [
+    {
+      backgroundColor: "rgba(240, 52, 52, 0.8)",
+    },
+    {
+      backgroundColor: "rgba(0,255,0,0.8)",
+    },
+    {
+      backgroundColor: "rgba(0,0,0,0.8)",
+    },
+  ];
+
   constructor(private http: HttpClass, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.lineChartData = initializeLabels(this.labels);
+
     this.subs.push(
       this.http.getAllCountries().subscribe((data) => {
         this.countries = data.sort((a: ICountryInfo, b: ICountryInfo) =>
@@ -56,6 +80,8 @@ export class LocationComponent implements OnInit, OnDestroy {
           this.mainData = data;
 
           if (data.length) {
+            this.loadChartData(0);
+
             this.latitude = +data[0].Lat;
             this.longitude = +data[0].Lon;
 
@@ -73,15 +99,31 @@ export class LocationComponent implements OnInit, OnDestroy {
             );
             this.error = null;
           } else {
-            this.error = "No data!";
+            this.error = "There are no data for this country!";
             this.isLoading = false;
           }
         },
         (error) => {
-          this.error = error.message;
+          this.error = "This country is not found!";
           this.isLoading = false;
         }
       )
     );
+  }
+
+  onLoadChartData(type: number) {
+    this.loadChartData(type);
+  }
+
+  loadChartData(type: number) {
+    this.activeSort = type;
+    let filteredData = [];
+
+    filteredData = this.mainData.slice(0 - this.activeSort);
+    this.text = `Covid-19 in ${this.mainData[0].Country}`;
+
+    this.lineChartData = chartDataLoader(this.lineChartData, filteredData);
+
+    this.lineChartLabels = filteredData.map((el) => el.Date);
   }
 }

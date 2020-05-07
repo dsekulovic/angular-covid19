@@ -13,8 +13,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   data: ICovidInfo;
   chartData: ICountryInfo[];
   error = null;
-  totalLabels: string[] = ["TotalConfirmed", "TotalRecovered", "TotalDeaths"];
-  newLabels: string[] = ["NewConfirmed", "NewRecovered", "NewDeaths"];
+  totalLabels: string[] = [
+    "Total Confirmed",
+    "Total Recovered",
+    "Total Deaths",
+  ];
+  newLabels: string[] = ["New Confirmed", "New Recovered", "New Deaths"];
   dataSubscription$: Subscription;
 
   constructor(private http: HttpClass) {}

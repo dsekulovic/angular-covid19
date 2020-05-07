@@ -1,14 +1,14 @@
 <div class="mt-3 justify-content-center">
     <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-outline-secondary" [class.active]="activeSort === info"
-            *ngFor="let info of (period || labels)">
+        <label class="btn btn-outline-secondary" [class.active]="activeSort === info.split(' ').join('')"
+            *ngFor="let info of labels">
             <input type="radio" name="options" (click)="onLoadChartData(info)">
             {{ info | textTransform }}
         </label>
     </div>
     <div class="mt-4">
-        <canvas height="{{period ? '100' : '250'}}" baseChart [datasets]="lineChartData" [labels]="lineChartLabels"
-            [chartType]="lineChartType" [colors]="lineChartColors">
+        <canvas height="250" baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [chartType]="lineChartType"
+            [colors]="lineChartColors">
         </canvas>
         <h5 class="text-center py-2">{{text | textTransform | lowercase}}</h5>
     </div>
