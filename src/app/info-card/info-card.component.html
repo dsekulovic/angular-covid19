@@ -1,7 +1,7 @@
 <div class="col-md-4 mb-2">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Total confirmed:</h5>
+            <h5 class="card-title">Confirmed</h5>
             <h3 class="card-text">{{data.TotalConfirmed | number }}</h3>
             <h6 class="card-text text-danger" *ngIf="data.NewConfirmed">+{{data.NewConfirmed | number }}</h6>
         </div>
@@ -10,7 +10,7 @@
 <div class="col-md-4 mb-2">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Total recovered:</h5>
+            <h5 class="card-title">Recovered</h5>
             <h3 class="card-text">{{ data.TotalRecovered | number }}</h3>
             <h6 class="card-text text-danger" *ngIf="data.NewRecovered">+{{ data.NewRecovered | number }}</h6>
         </div>
@@ -19,7 +19,7 @@
 <div class="col-md-4 mb-2">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Total deaths:</h5>
+            <h5 class="card-title">Deaths</h5>
             <h3 class="card-text">{{ data.TotalDeaths | number }}</h3>
             <h6 class="card-text text-danger" *ngIf="data.NewDeaths">+{{ data.NewDeaths | number }}</h6>
         </div>
