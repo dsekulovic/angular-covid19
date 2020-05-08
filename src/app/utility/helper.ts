@@ -1,4 +1,5 @@
 import { ChartDataSets } from "chart.js";
+import { ICountryInfo } from "../interface/interface";
 
 export function joinString(str: string) {
   return str.split(" ").join("");
@@ -10,7 +11,7 @@ export function initializeLabels(labels: string[]) {
 
 export function chartDataLoader(
   data: ChartDataSets[],
-  filteredData: ChartDataSets[]
+  filteredData: ICountryInfo[]
 ) {
   return data.reduce(
     (acc, el) => [

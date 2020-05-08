@@ -27,6 +27,7 @@ export class LocationComponent implements OnInit, OnDestroy {
   searchText: string;
   subs: Subscription[] = [];
   activeCountry: string;
+  totalData: {};
 
   text: string;
   activeSort: number;
@@ -83,6 +84,18 @@ export class LocationComponent implements OnInit, OnDestroy {
 
           if (data.length) {
             this.loadChartData(0);
+            const lastElement = this.mainData[this.mainData.length - 1];
+            const {
+              Confirmed: TotalConfirmed,
+              Recovered: TotalRecovered,
+              Deaths: TotalDeaths,
+            } = lastElement;
+
+            this.totalData = {
+              TotalConfirmed,
+              TotalRecovered,
+              TotalDeaths,
+            };
 
             this.latitude = +data[0].Lat;
             this.longitude = +data[0].Lon;

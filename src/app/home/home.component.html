@@ -7,12 +7,32 @@
     <h1>An error occurred!</h1>
     <p>{{ error }}</p>
 </div>
-<div class="container" *ngIf="!isLoading && !error">
+<div class="mx-5 px-5" *ngIf="!isLoading && !error">
     <app-info-card class="row text-center mt-4" [data]="data"></app-info-card>
     <div class="row">
-        <app-charts class="col-lg-6" [chartData]="chartData" [labels]="totalLabels" [numberOfData]="20">
+        <app-charts class="col-xl-7" [chartData]="lineChartData" [labels]="totalLabels"
+            [lineChartLabels]="lineChartLabels" [text]="text" [activeSort]="activeSort"
+            (loadChartData)="onLoadChartData($event)">
         </app-charts>
-        <app-charts class="col-lg-6" [chartData]="chartData" [labels]="newLabels" [numberOfData]="20">
-        </app-charts>
+        <table class="table table-sm table-striped col-xl-5 mt-3">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Country</th>
+                    <th scope="col">Total Confirmed</th>
+                    <th scope="col">Total Recovered</th>
+                    <th scope="col">Total Deaths</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of tableData; let i=index">
+                    <th scope="row">{{ i+1 }}</th>
+                    <td>{{ data.Country }}</td>
+                    <td>{{ data.TotalConfirmed }}</td>
+                    <td>{{ data.TotalRecovered }}</td>
+                    <td>{{ data.TotalDeaths }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
