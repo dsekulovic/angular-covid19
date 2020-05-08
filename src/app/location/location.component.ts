@@ -84,11 +84,13 @@ export class LocationComponent implements OnInit, OnDestroy {
 
           if (data.length) {
             this.loadChartData(0);
-            let lastElement = this.mainData[this.mainData.length - 1];
+            const lastElement = this.mainData[this.mainData.length - 1];
+            const { Confirmed, Recovered, Deaths } = lastElement;
+
             this.totalData = {
-              TotalConfirmed: lastElement.Confirmed,
-              TotalRecovered: lastElement.Recovered,
-              TotalDeaths: lastElement.Deaths,
+              TotalConfirmed: Confirmed,
+              TotalRecovered: Recovered,
+              TotalDeaths: Deaths,
             };
 
             this.latitude = +data[0].Lat;

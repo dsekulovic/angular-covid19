@@ -87,8 +87,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         a[this.activeSort] < b[this.activeSort] ? 1 : -1
       )
       .slice(0, this.numberOfData);
+
     this.lineChartData = chartDataLoader(this.lineChartData, this.tableData);
     this.lineChartLabels = this.tableData.map((el) => el.Country);
+
     this.text = `${this.numberOfData} countries with most ${this.activeSort} cases`;
   }
 }
