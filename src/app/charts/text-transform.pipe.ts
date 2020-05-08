@@ -12,5 +12,7 @@ export class TextTransformPipe implements PipeTransform {
     if (data.includes("Total")) return data.replace("Total", "Total ");
 
     if (data.includes("New")) return data.replace("New", "New ");
+
+    return data;
   }
 }
