@@ -6,6 +6,10 @@ import { Subscription } from "rxjs";
 import { Label } from "ng2-charts";
 import { ChartType, ChartDataSets } from "chart.js";
 import { chartDataLoader, initializeLabels } from "../utility/helper";
+import { Store } from "@ngrx/store";
+import * as fromApp from "../store/app.reducer";
+import { map } from "rxjs/operators";
+import * as LocationActions from "./store/location.actions";
 
 @Component({
   selector: "app-location",
@@ -48,18 +52,32 @@ export class LocationComponent implements OnInit, OnDestroy {
     },
   ];
 
-  constructor(private http: HttpClass, private route: ActivatedRoute) {}
+  constructor(
+    private http: HttpClass,
+    private route: ActivatedRoute,
+    private store: Store<fromApp.AppState>
+  ) {}
 
   ngOnInit(): void {
     this.lineChartData = initializeLabels(this.labels);
-
-    this.subs.push(
-      this.http.getAllCountries().subscribe((data) => {
-        this.countries = data.sort((a: ICountryInfo, b: ICountryInfo) =>
+    this.store.select("global").subscribe((data) => {
+      if (data.countries.length) {
+        this.countries = [
+          ...data.countries,
+        ].sort((a: ICountryInfo, b: ICountryInfo) =>
           a.Country > b.Country ? 1 : -1
         );
-      })
-    );
+      } else {
+        // temporary
+        this.subs.push(
+          this.http.getAllCountries().subscribe((data) => {
+            this.countries = data.sort((a: ICountryInfo, b: ICountryInfo) =>
+              a.Country > b.Country ? 1 : -1
+            );
+          })
+        );
+      }
+    });
 
     this.subs.push(
       this.route.params.subscribe((params) => this.dataForCountry(params["id"]))
@@ -77,52 +95,51 @@ export class LocationComponent implements OnInit, OnDestroy {
 
   dataForCountry(data: string) {
     this.activeCountry = data;
-    this.subs.push(
-      this.http.getDataForCountry(data).subscribe(
-        (data) => {
-          this.mainData = data;
+    this.store.dispatch(new LocationActions.LocationLoading({ slug: data }));
+    this.store.select("location").subscribe(
+      (data) => {
+        this.mainData = data.countries;
 
-          if (data.length) {
-            this.loadChartData(0);
-            const lastElement = this.mainData[this.mainData.length - 1];
-            const {
-              Confirmed: TotalConfirmed,
-              Recovered: TotalRecovered,
-              Deaths: TotalDeaths,
-            } = lastElement;
+        if (this.mainData.length) {
+          this.loadChartData(0);
+          const lastElement = this.mainData[this.mainData.length - 1];
+          const {
+            Confirmed: TotalConfirmed,
+            Recovered: TotalRecovered,
+            Deaths: TotalDeaths,
+          } = lastElement;
 
-            this.totalData = {
-              TotalConfirmed,
-              TotalRecovered,
-              TotalDeaths,
-            };
+          this.totalData = {
+            TotalConfirmed,
+            TotalRecovered,
+            TotalDeaths,
+          };
 
-            this.latitude = +data[0].Lat;
-            this.longitude = +data[0].Lon;
+          this.latitude = +this.mainData[0].Lat;
+          this.longitude = +this.mainData[0].Lon;
 
-            this.subs.push(
-              this.http.getWeather(this.latitude, this.longitude).subscribe(
-                (data) => (
-                  (this.weather = {
-                    ...this.weather,
-                    temp: Math.round(data.temp),
-                    name: data.name,
-                  }),
-                  (this.isLoading = false)
-                )
+          this.subs.push(
+            this.http.getWeather(this.latitude, this.longitude).subscribe(
+              (data) => (
+                (this.weather = {
+                  ...this.weather,
+                  temp: Math.round(data.temp),
+                  name: data.name,
+                }),
+                (this.isLoading = false)
               )
-            );
-            this.error = null;
-          } else {
-            this.error = "There are no data for this country!";
-            this.isLoading = false;
-          }
-        },
-        (error) => {
-          this.error = "This country is not found!";
+            )
+          );
+          this.error = null;
+        } else {
+          this.error = "There are no data for this country!";
           this.isLoading = false;
         }
-      )
+      },
+      (error) => {
+        this.error = "This country is not found!";
+        this.isLoading = false;
+      }
     );
   }
 
