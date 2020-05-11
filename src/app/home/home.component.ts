@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { HttpClass } from "../http.service";
+import { Component, OnInit } from "@angular/core";
 import { ICovidInfo, ICountryInfo } from "../interface/interface";
 import { Subscription } from "rxjs";
 import { Label } from "ng2-charts";
@@ -9,14 +8,17 @@ import {
   joinString,
   chartDataLoader,
 } from "../utility/helper";
+import { Store } from "@ngrx/store";
+import * as fromApp from "../store/app.reducer";
+import * as GlobalActions from "./store/global.actions";
 
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
 })
-export class HomeComponent implements OnInit, OnDestroy {
-  isLoading: boolean = false;
+export class HomeComponent implements OnInit {
+  isLoading: boolean;
   data: ICovidInfo;
   chartData: ICountryInfo[];
   tableData: ICountryInfo[];
@@ -47,32 +49,23 @@ export class HomeComponent implements OnInit, OnDestroy {
     },
   ];
 
-  constructor(private http: HttpClass) {}
+  constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit(): void {
-    this.fetchingData();
+    this.store.dispatch(new GlobalActions.GlobalLoading());
     this.lineChartData = initializeLabels(this.totalLabels);
-  }
-
-  ngOnDestroy() {
-    this.dataSubscription$.unsubscribe();
-  }
-
-  fetchingData() {
-    this.isLoading = true;
-    this.dataSubscription$ = this.http.getTotalData().subscribe(
-      ({ countries, global }) => {
-        this.isLoading = false;
-        this.chartData = countries;
-
-        this.data = global;
-        this.loadChartData(joinString(this.totalLabels[0]));
-      },
-      (error) => {
-        this.error = error.message;
-        this.isLoading = false;
-      }
-    );
+    this.store
+      .select("global")
+      .subscribe(({ countries, globalData, isLoading, error }) => {
+        if (error) {
+          this.error = error;
+        } else {
+          this.isLoading = isLoading;
+          this.chartData = countries;
+          this.data = globalData;
+          this.loadChartData(joinString(this.totalLabels[0]));
+        }
+      });
   }
 
   onLoadChartData(type: string) {
@@ -82,7 +75,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   loadChartData(type: string) {
     this.activeSort = joinString(type);
 
-    this.tableData = this.chartData
+    this.tableData = [...this.chartData]
       .sort((a: ICountryInfo, b: ICountryInfo) =>
         a[this.activeSort] < b[this.activeSort] ? 1 : -1
       )

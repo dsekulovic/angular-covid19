@@ -7,7 +7,7 @@
     <h1>An error occurred!</h1>
     <p>{{ error }}</p>
 </div>
-<div class="mx-5 px-5" *ngIf="!isLoading && !error">
+<div class="mx-lg-5 px-lg-5 px-3" *ngIf="!isLoading && !error">
     <app-info-card class="row text-center mt-4" [data]="data"></app-info-card>
     <div class="row">
         <app-charts class="col-xl-7" [chartData]="lineChartData" [labels]="totalLabels"

@@ -14,6 +14,13 @@ import { ChartsComponent } from "./charts/charts.component";
 import { FormsModule } from "@angular/forms";
 import { FilterPipe } from "./location/filter.pipe";
 import { TextTransformPipe } from "./charts/text-transform.pipe";
+import { StoreDevtoolsModule } from "@ngrx/store-devtools";
+import { StoreModule } from "@ngrx/store";
+import * as fromApp from "./store/app.reducer";
+import { environment } from "../environments/environment";
+import { EffectsModule } from "@ngrx/effects";
+import { GlobalEffects } from "./home/store/global.effects";
+import { LocationEffects } from "./location/store/location.effects";
 
 @NgModule({
   declarations: [
@@ -35,6 +42,9 @@ import { TextTransformPipe } from "./charts/text-transform.pipe";
       apiKey: GOOGLE_API_KEY,
     }),
     FormsModule,
+    StoreModule.forRoot(fromApp.appReducer),
+    StoreDevtoolsModule.instrument({ logOnly: environment.production }),
+    EffectsModule.forRoot([GlobalEffects, LocationEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent],
