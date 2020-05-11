@@ -85,16 +85,23 @@ export class LocationComponent implements OnInit, OnDestroy {
           if (data.length) {
             this.loadChartData(0);
             const lastElement = this.mainData[this.mainData.length - 1];
+            const elementBeforeLastElement = this.mainData[
+              this.mainData.length - 2
+            ];
             const {
               Confirmed: TotalConfirmed,
               Recovered: TotalRecovered,
               Deaths: TotalDeaths,
             } = lastElement;
+            const { Confirmed, Recovered, Deaths } = elementBeforeLastElement;
 
             this.totalData = {
               TotalConfirmed,
               TotalRecovered,
               TotalDeaths,
+              NewConfirmed: TotalConfirmed - Confirmed,
+              NewRecovered: TotalRecovered - Recovered,
+              NewDeaths: TotalDeaths - Deaths,
             };
 
             this.latitude = +data[0].Lat;
@@ -102,17 +109,16 @@ export class LocationComponent implements OnInit, OnDestroy {
 
             this.subs.push(
               this.http.getWeather(this.latitude, this.longitude).subscribe(
-                (data) => (
+                (data) =>
                   (this.weather = {
                     ...this.weather,
                     temp: Math.round(data.temp),
                     name: data.name,
-                  }),
-                  (this.isLoading = false)
-                )
+                  })
               )
             );
             this.error = null;
+            this.isLoading = false;
           } else {
             this.error = "There are no data for this country!";
             this.isLoading = false;

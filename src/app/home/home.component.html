@@ -7,14 +7,15 @@
     <h1>An error occurred!</h1>
     <p>{{ error }}</p>
 </div>
-<div class="mx-5 px-5" *ngIf="!isLoading && !error">
+<div class="mx-lg-5 px-lg-5 px-3" *ngIf="!isLoading && !error">
     <app-info-card class="row text-center mt-4" [data]="data"></app-info-card>
-    <div class="row">
-        <app-charts class="col-xl-7" [chartData]="lineChartData" [labels]="totalLabels"
+    <div class="row mx-0">
+        <app-charts class="col-xl-6 mx-xl-0 px-0" [chartData]="lineChartData" [labels]="totalLabels"
             [lineChartLabels]="lineChartLabels" [text]="text" [activeSort]="activeSort"
             (loadChartData)="onLoadChartData($event)">
         </app-charts>
-        <table class="table table-sm table-striped col-xl-5 mt-3">
+        <div class="col-xl-1"></div>
+        <table class="table table-sm table-striped col-xl-5 mt-3 mx-lg-0 px-3">
             <thead>
                 <tr>
                     <th scope="col">#</th>
