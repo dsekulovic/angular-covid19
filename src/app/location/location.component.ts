@@ -91,7 +91,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     this.store.dispatch(new LocationActions.LocationLoading({ slug: data }));
     this.store.select("location").subscribe(
       (data) => {
-        this.mainData = data.countries;
+        this.mainData = data.country;
 
         if (this.mainData.length) {
           this.loadChartData(0);
