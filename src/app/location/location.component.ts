@@ -68,14 +68,7 @@ export class LocationComponent implements OnInit, OnDestroy {
           a.Country > b.Country ? 1 : -1
         );
       } else {
-        // temporary
-        this.subs.push(
-          this.http.getAllCountries().subscribe((data) => {
-            this.countries = data.sort((a: ICountryInfo, b: ICountryInfo) =>
-              a.Country > b.Country ? 1 : -1
-            );
-          })
-        );
+        this.store.dispatch(new LocationActions.FetchCountries());
       }
     });
 
@@ -115,21 +108,31 @@ export class LocationComponent implements OnInit, OnDestroy {
             TotalDeaths,
           };
 
-          this.latitude = +this.mainData[0].Lat;
-          this.longitude = +this.mainData[0].Lon;
+          this.name = data.name;
+          this.temp = data.temp;
 
-          this.subs.push(
-            this.http.getWeather(this.latitude, this.longitude).subscribe(
-              (data) => (
-                (this.weather = {
-                  ...this.weather,
-                  temp: Math.round(data.temp),
-                  name: data.name,
-                }),
-                (this.isLoading = false)
-              )
-            )
-          );
+          // this.latitude = +this.mainData[0].Lat;
+          // this.longitude = +this.mainData[0].Lon;
+
+          // this.store.dispatch(
+          //   new LocationActions.GetWeather({
+          //     lat: this.latitude,
+          //     lon: this.longitude,
+          //   })
+          // );
+
+          // this.subs.push(
+          //   this.http.getWeather(this.latitude, this.longitude).subscribe(
+          //     (data) => (
+          //       (this.weather = {
+          //         ...this.weather,
+          //         temp: Math.round(data.temp),
+          //         name: data.name,
+          //       }),
+          //       (this.isLoading = false)
+          //     )
+          //   )
+          // );
           this.error = null;
         } else {
           this.error = "There are no data for this country!";
